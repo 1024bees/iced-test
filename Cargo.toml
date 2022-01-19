@@ -1,0 +1,16 @@
+[package]
+name = "iced-test"
+version = "0.1.0"
+edition = "2021"
+authors = ["1024bees <jimmy@1024bees.com>"]
+description = "Testing utilities for the Iced GUI library"
+readme = "README.md"
+keywords = ["gui", "ui", "graphics", "interface", "widgets", "iced"]
+categories = ["gui"]
+
+
+
+[dependencies]
+
+iced = {git = "https://github.com/1024bees/iced", branch="headless" }
+
