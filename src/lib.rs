@@ -1,6 +1,5 @@
 //! Additional widgets for the Iced GUI library.
 #![deny(missing_docs)]
-#![deny(missing_debug_implementations)]
 #![deny(unused_results)]
 #![forbid(unsafe_code)]
 #![warn(
@@ -43,4 +42,5 @@
 )]
 
 pub mod runners;
-pub mod trace;
+pub mod trace_events;
+pub mod rendering;

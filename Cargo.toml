@@ -13,4 +13,12 @@ categories = ["gui"]
 [dependencies]
 
 iced = {git = "https://github.com/1024bees/iced", branch="headless" }
+iced_graphics = {git = "https://github.com/1024bees/iced", branch="headless" }
 
+iced_native = {git = "https://github.com/1024bees/iced", branch="headless" }
+iced_winit = {git = "https://github.com/1024bees/iced", branch="headless" }
+
+[dependencies.winit]
+version = "0.25"
+git = "https://github.com/iced-rs/winit"
+rev = "1e6623c4d06d110e5408dcbdf1edebd07e6a200e"
