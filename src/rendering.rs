@@ -25,6 +25,7 @@ where
 }
 
 //#[cfg(not(feature = "glow"))]
+/// Winit implementation for rendering a single frame to a [`Screenshot`]
 fn render_winit<A>(application: &mut A, window_size: (u32, u32)) -> Screenshot
 where
     A: Application<Renderer = iced_graphics::Renderer<crate::renderer::Backend>> + 'static,
@@ -84,6 +85,8 @@ where
 }
 
 #[cfg(feature = "glow")]
+/// Glutin implementation for rendering a single frame to a [`Screenshot`]; this compiles fine but
+/// hasn't been tested yet
 fn render_glutin<A>(application: &mut A, window_size: (u32, u32)) -> Screenshot
 where
     A: Application<Renderer = iced_graphics::Renderer<crate::renderer::Backend>> + 'static,
@@ -92,6 +95,7 @@ where
 
     use glutin::ContextBuilder;
     use iced_graphics::window::GLCompositor;
+    use iced_winit::application;
 
     let renderer_settings = crate::renderer::Settings {
         headless: true,
