@@ -5,7 +5,7 @@ This crate contains testing utilities for the GUI library [Iced](https://github.
 
 ## Overview:
 
-This crate tests applications is by executing traces. A trace is a serialized record of messages and assertions that are passed to an application. In code, a trace can be described as follows:
+This crate tests applications by executing traces. A trace is a serialized record of messages and assertions that are passed to an application. In code, a trace can be described as follows:
 
 
 ```rust
@@ -31,7 +31,7 @@ pub enum TraceEvent<A: iced::Application> {
 ```
 
 
-A trace can also be a serialized view of only Application messages
+A trace can also be a serialized view of solely Application messages
 
 
 
