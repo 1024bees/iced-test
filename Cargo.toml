@@ -1,5 +1,5 @@
 [package]
-name = "iced-test"
+name = "iced_test"
 version = "0.1.0"
 edition = "2021"
 authors = ["1024bees <jimmy@1024bees.com>"]
