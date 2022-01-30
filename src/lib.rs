@@ -1,7 +1,7 @@
 //! Additional widgets for the Iced GUI library.
 #![deny(missing_docs)]
 #![deny(unused_results)]
-#![forbid(unsafe_code)]
+//#![forbid(unsafe_code)]
 #![warn(
     clippy::pedantic,
     clippy::nursery,
@@ -41,6 +41,20 @@
     clippy::module_name_repetitions
 )]
 
+pub mod rendering;
 pub mod runners;
 pub mod trace_events;
-pub mod rendering;
+
+#[cfg(all(not(target_arch = "wasm32"), not(feature = "glow")))]
+use iced_wgpu as renderer;
+
+#[cfg(all(not(target_arch = "wasm32"), feature = "glow"))]
+use iced_glow as renderer;
+
+#[cfg(all(not(target_arch = "wasm32"), not(feature = "glow"),))]
+use iced_winit as runtime;
+
+#[cfg(all(not(target_arch = "wasm32"), feature = "glow"))]
+use iced_glutin as runtime;
+
+pub use trace_events::TraceEvent;
