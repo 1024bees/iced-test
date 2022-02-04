@@ -3,7 +3,7 @@
 use crate::runtime::{application::Application, settings::Window, Size};
 use iced::Screenshot;
 use iced_graphics::window::{Compositor, VirtualCompositor};
-use iced_native::Cache;
+use iced_native::user_interface::Cache;
 use winit::platform::unix::EventLoopExtUnix;
 
 use std::mem::{drop, ManuallyDrop};
@@ -34,7 +34,7 @@ where
     #[cfg(not(target_os = "ios"))]
     let event_loop: EventLoop<A::Message> = EventLoop::new_any_thread();
     #[cfg(target_os = "ios")]
-    let event_loop: EventLoop<A::Message> = EventLoop::new();
+    let event_loop: EventLoop<A::Message> = EventLoop::with_user_event();
 
     let renderer_settings = crate::renderer::Settings {
         headless: true,

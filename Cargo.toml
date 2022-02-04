@@ -23,10 +23,13 @@ iced_glow = {git = "https://github.com/1024bees/iced", branch="headless", option
 
 
 
+
+
 [dependencies.winit]
-version = "0.25"
+version = "0.26"
 git = "https://github.com/iced-rs/winit"
-rev = "1e6623c4d06d110e5408dcbdf1edebd07e6a200e"
+rev = "02a12380960cec2f351c09a33d6a7cc2789d96a6"
+
 
 [dependencies.glutin]
 version = "0.27"

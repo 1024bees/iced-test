@@ -10,4 +10,4 @@ iced = {git = "https://github.com/1024bees/iced", branch="headless" }
 
 
 [dev-dependencies]
-iced-test = {path = "../.."}
+iced_test = {path = "../.."}
