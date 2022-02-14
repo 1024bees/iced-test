@@ -74,17 +74,17 @@ mod test {
         assert_eq!(app_state.value, 2)
     }
 
-    #[test]
-    fn increment_ss_test() {
-        let message_trace = vec![
-            TraceEvent::Message(Message::IncrementPressed),
-            TraceEvent::Message(Message::IncrementPressed),
-            TraceEvent::TakeScreenshot(PathBuf::from(format!(
-                "{}/golden/increment_ss.png",
-                env!("CARGO_MANIFEST_DIR")
-            ))),
-        ];
-        let app_state: Counter = execute_iced_trace((), message_trace);
-        assert_eq!(app_state.value, 2)
-    }
+    //#[test]
+    //fn increment_ss_test() {
+    //    let message_trace = vec![
+    //        TraceEvent::Message(Message::IncrementPressed),
+    //        TraceEvent::Message(Message::IncrementPressed),
+    //        TraceEvent::TakeScreenshot(PathBuf::from(format!(
+    //            "{}/golden/increment_ss.png",
+    //            env!("CARGO_MANIFEST_DIR")
+    //        ))),
+    //    ];
+    //    let app_state: Counter = execute_iced_trace((), message_trace);
+    //    assert_eq!(app_state.value, 2)
+    //}
 }

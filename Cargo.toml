@@ -12,14 +12,15 @@ categories = ["gui"]
 
 [dependencies]
 
-iced = {package="iced", git = "https://github.com/1024bees/iced", branch="headless"} 
-iced_graphics = {git = "https://github.com/1024bees/iced", branch="headless" }
-iced_native = {git = "https://github.com/1024bees/iced", branch="headless" }
-iced_winit = {git = "https://github.com/1024bees/iced", branch="headless" }
-iced_wgpu = {git = "https://github.com/1024bees/iced", branch="headless" }
-iced_core = {git = "https://github.com/1024bees/iced", branch="headless" }
-iced_glutin = {git = "https://github.com/1024bees/iced", branch="headless", optional=true }
-iced_glow = {git = "https://github.com/1024bees/iced", branch="headless", optional=true }
+iced = {git = "https://github.com/iced-rs/iced", branch="master" }
+iced_graphics = {git = "https://github.com/iced-rs/iced", branch="master" }
+iced_native = {git = "https://github.com/iced-rs/iced", branch="master" }
+iced_winit = {git = "https://github.com/iced-rs/iced", branch="master" }
+iced_wgpu = {git = "https://github.com/iced-rs/iced", branch="master" }
+iced_core = {git = "https://github.com/iced-rs/iced", branch="master" }
+iced_glutin = {git = "https://github.com/iced-rs/iced", branch="master", optional=true }
+iced_glow = {git = "https://github.com/iced-rs/iced", branch="master", optional=true }
+png = "0.17.2"
 
 
 
@@ -37,10 +38,9 @@ git = "https://github.com/iced-rs/glutin"
 rev = "492c20605907accf2b5dc2da52284305fd128346"
 optional=true
 
+[dev-dependencies]
+tempfile = "*"
 
-
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-iced = {git = "https://github.com/1024bees/iced", branch="headless" }
 
 
 

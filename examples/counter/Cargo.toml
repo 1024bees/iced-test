@@ -6,7 +6,7 @@ edition = "2018"
 publish = false
 
 [dependencies]
-iced = {git = "https://github.com/1024bees/iced", branch="headless" }
+iced = {git = "https://github.com/iced-rs/iced", branch="master" }
 
 
 [dev-dependencies]

@@ -1,6 +1,6 @@
 //! Interfaces for running applicationss end-to-end with no user interaction
 
-use crate::rendering::render_once;
+//use crate::rendering::render_once;
 use crate::trace_events::TraceEvent;
 //use iced::{Application};
 use iced_native::Program;
@@ -36,14 +36,14 @@ where
             TraceEvent::SetState(set_state) => {
                 set_state(&mut application.0);
             }
-            TraceEvent::CheckScreenshot(screenshot_check) => {
-                let screenshot = render_once(&mut application, window_size);
-                assert!(screenshot_check(screenshot));
-            }
-            TraceEvent::TakeScreenshot(path) => {
-                let screenshot = render_once(&mut application, window_size);
-                screenshot.save_image_to_png(path);
-            }
+            //TraceEvent::CheckScreenshot(screenshot_check) => {
+            //    let screenshot = render_once(&mut application, window_size);
+            //    assert!(screenshot_check(screenshot));
+            //}
+            //TraceEvent::TakeScreenshot(path) => {
+            //    let screenshot = render_once(&mut application, window_size);
+            //    screenshot.save_image_to_png(path);
+            //}
         }
     }
 
