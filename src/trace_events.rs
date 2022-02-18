@@ -4,6 +4,7 @@
 //! [`Application`]: iced::Application
 
 //pub use iced::Screenshot;
+use crate::rendering::screenshot::Screenshot;
 use std::path::PathBuf;
 /// Events that can compose serialized execution
 pub enum TraceEvent<A: iced::Application> {
@@ -15,9 +16,9 @@ pub enum TraceEvent<A: iced::Application> {
     StateCheck(Box<dyn Fn(&A) -> bool>),
     ///Configure [`Application`] state directly
     SetState(Box<dyn Fn(&mut A)>),
-    ////Render a [`Screenshot`] of the current app, passes the [`Screenshot`] into a user provided
-    ////function
-    //CheckScreenshot(Box<dyn Fn(Screenshot) -> bool>),
-    /////Take a screenshot, save it to the provided [`PathBuf`]
-    //TakeScreenshot(PathBuf),
+    ///Render a [`Screenshot`] of the current app, passes the [`Screenshot`] into a user provided
+    ///function
+    CheckScreenshot(Box<dyn Fn(Screenshot) -> bool>),
+    ///Take a screenshot, save it to the provided [`PathBuf`]
+    TakeScreenshot(PathBuf),
 }

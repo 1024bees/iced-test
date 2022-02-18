@@ -20,6 +20,11 @@ iced_wgpu = {git = "https://github.com/iced-rs/iced", branch="master" }
 iced_core = {git = "https://github.com/iced-rs/iced", branch="master" }
 iced_glutin = {git = "https://github.com/iced-rs/iced", branch="master", optional=true }
 iced_glow = {git = "https://github.com/iced-rs/iced", branch="master", optional=true }
+
+raw-window-handle = "0.4"
+futures = "0.3"
+
+wgpu = {version = "0.12"}
 png = "0.17.2"
 
 

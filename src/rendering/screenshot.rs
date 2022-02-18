@@ -1,3 +1,5 @@
+//! Data structure representing a screenshot
+
 use std::error::Error;
 use std::fs::File;
 use std::io::Write;
