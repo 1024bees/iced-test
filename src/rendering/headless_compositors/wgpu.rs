@@ -18,7 +18,6 @@ pub struct Compositor {
     format: wgpu::TextureFormat,
     frame_buffer: Option<Framebuffer>,
     size: BufferDimensions,
-    generator: Option<Box<dyn Fn(Option<Screenshot>)>>,
 }
 
 impl Compositor {
@@ -88,8 +87,6 @@ impl Compositor {
             local_pool,
             format,
             frame_buffer,
-
-            generator: None,
             size: BufferDimensions::default(),
         })
     }
