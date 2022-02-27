@@ -12,7 +12,9 @@ pub struct Screenshot {
     width: usize,
     /// Height of the image in pixels
     height: usize,
+    /// Encodes color format of the png
     color_encoding: ColorType,
+    /// Encodes origin of the payload bytes
     source_encoding: ByteSource,
 }
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -56,7 +58,8 @@ impl From<png::ColorType> for ColorType {
 
 impl Screenshot {
     /// Create a new [`Screenshot`] object
-    #[must_use] pub fn new(payload: Vec<u8>, width: usize, height: usize) -> Self {
+    #[must_use]
+    pub fn new(payload: Vec<u8>, width: usize, height: usize) -> Self {
         Self {
             payload: Arc::new(payload),
             width,
@@ -67,7 +70,8 @@ impl Screenshot {
     }
 
     /// Sets the encoding field for a [`Screenshot`] object
-    #[must_use] pub fn color_encoding(mut self, color_type: ColorType) -> Self {
+    #[must_use]
+    pub fn color_encoding(mut self, color_type: ColorType) -> Self {
         self.color_encoding = color_type;
 
         self
@@ -91,7 +95,7 @@ impl Screenshot {
 
     /// Saves the [`Screenshot`] to the input path
     pub fn save_image_to_png<S: AsRef<std::path::Path>>(&self, path: S) {
-        let file = std::fs::File::create(path).unwrap();
+        let file = std::fs::File::create(path).expect("Path doesn't exist!");
         self.encode_png(file);
     }
 
@@ -110,17 +114,19 @@ impl Screenshot {
             ByteSource::WGPU => wgpu::COPY_BYTES_PER_ROW_ALIGNMENT as usize,
             ByteSource::Png => 0,
         };
+
         let padded_bytes_per_row_padding = if align != 0 {
             (align - unpadded_bytes_per_row % align) % align
         } else {
             0
         };
+
         let padded_bytes_per_row = unpadded_bytes_per_row + padded_bytes_per_row_padding;
 
-        let mut png_writer_z = png_encoder.write_header().unwrap();
+        let mut png_writer_z = png_encoder.write_header().expect("Writing buffer failed");
         let mut png_writer = png_writer_z
             .stream_writer_with_size(unpadded_bytes_per_row as usize)
-            .unwrap();
+            .expect("Creating stream failed");
 
         // from the padded_buffer we write just the unpadded bytes into the image
         for chunk in self.payload.chunks(padded_bytes_per_row) {
@@ -135,14 +141,19 @@ impl Screenshot {
     /// This does a round-trip from raw data-> png data -> back to "raw frame data;
     /// The motivation for this is that the raw pixel data of a screenshot won't be equivalent to what the data in a png frame will be
     /// due to padding or other encoding limitations
-    #[must_use] pub fn encode_png_frame(self) -> Self {
+    #[must_use]
+    pub fn encode_png_frame(self) -> Self {
         let mut out_vec = vec![];
         self.encode_png(&mut out_vec);
 
         let decoder = png::Decoder::new(out_vec.as_slice());
-        let mut reader = decoder.read_info().unwrap();
+        let mut reader = decoder
+            .read_info()
+            .expect("Decoder failed reading info, png may be malformed");
         let mut payload = vec![0; reader.output_buffer_size()];
-        let out = reader.next_frame(&mut payload).unwrap();
+        let out = reader
+            .next_frame(&mut payload)
+            .expect("Reading frame failed");
         Self {
             payload: Arc::new(payload),
             width: out.width as usize,

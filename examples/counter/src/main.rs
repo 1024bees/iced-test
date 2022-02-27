@@ -75,14 +75,16 @@ mod test {
     }
 
     #[test]
-    fn increment_ss_test() {
+    fn increment_ss_test_take_and_cmp() {
         let message_trace = vec![
             TraceEvent::Message(Message::IncrementPressed),
             TraceEvent::Message(Message::IncrementPressed),
+            //we can take a screenshot!
             TraceEvent::TakeScreenshot(PathBuf::from(format!(
                 "{}/golden/increment_ss.png",
                 env!("CARGO_MANIFEST_DIR")
             ))),
+            //we take a screenshot and then can compare it to a "golden reference" that we have
             TraceEvent::CheckScreenshot(Box::new(|ss: Screenshot| {
                 let golden_ss = Screenshot::from_png(PathBuf::from(format!(
                     "{}/golden/increment_ss_ref.png",

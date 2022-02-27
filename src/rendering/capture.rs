@@ -11,7 +11,7 @@ use std::mem::{drop, ManuallyDrop};
 use iced_winit::application::{build_user_interface, State};
 use iced_winit::{Debug, Mode};
 //
-///// Render one frame of an application; this may only be called from testing utils
+/// Render one frame of an application with provided window size
 pub fn render_once<A>(application: &mut A, window_size: (u32, u32)) -> Screenshot
 where
     A: Application<Renderer = iced_graphics::Renderer<crate::renderer::Backend>> + 'static,
@@ -20,7 +20,7 @@ where
     //let ss = render_glutin(application, window_size);
 
     //#[cfg(not(feature = "glow"))]
-    
+
     render_wgpu(application, window_size)
 }
 //
@@ -79,7 +79,7 @@ where
         )
         .expect("NO FAILURE");
 
-    let ss = compositor.read().unwrap();
+    let ss = compositor.read().expect("Compositor read failed");
     drop(ManuallyDrop::into_inner(user_interface));
     ss
 }

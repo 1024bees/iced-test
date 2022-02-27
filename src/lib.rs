@@ -3,7 +3,6 @@
 #![deny(unused_results)]
 //#![forbid(unsafe_code)]
 #![warn(
-    clippy::pedantic,
     clippy::nursery,
 
     // Restriction lints

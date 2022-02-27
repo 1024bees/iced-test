@@ -9,6 +9,7 @@ use raw_window_handle::HasRawWindowHandle;
 /// A window graphics backend for iced powered by `wgpu`.
 #[allow(missing_debug_implementations)]
 pub struct Compositor {
+    ///Backend settings
     settings: Settings,
     instance: wgpu::Instance,
     device: wgpu::Device,
@@ -109,7 +110,7 @@ impl Compositor {
                 layout: wgpu::ImageDataLayout {
                     offset: 0,
                     bytes_per_row: Some(
-                        std::num::NonZeroU32::new(self.size.padded_bytes_per_row as u32).unwrap(),
+                        std::num::NonZeroU32::new(self.size.padded_bytes_per_row as u32).expect("Zero bytes per row"),
                     ),
                     rows_per_image: None,
                 },
@@ -121,8 +122,14 @@ impl Compositor {
             },
         )
     }
+    /// Interface for resizing the framebuffer that images are rendered into
     fn resize_framebuffer(&mut self, width: u32, height: u32) {
-        //FIXME: HACK! this is required because for some reason physical size -> 1.5x logical size
+        //FIXME: HACK! this is required because physical size is  1.5x logical size.
+        //If we don't do this, then the wgpu backend yells at us because we go out of bounds with
+        //certain wgpu commands 
+        //
+        //Longer term fix is to scale this based off of some aspect ratio provided by Window or
+        //viewport
         let width = width * 3 / 2;
         let height = height * 3 / 2;
         let framebuffer = {
@@ -157,6 +164,7 @@ impl Compositor {
 }
 
 impl Compositor {
+    /// Reads the frame buffer into a screenshot
     pub fn read(&self) -> Option<Screenshot> {
         let mut rv = Vec::new();
 
@@ -165,7 +173,7 @@ impl Compositor {
             let buffer_future = buffer_slice.map_async(wgpu::MapMode::Read);
             self.device.poll(wgpu::Maintain::Wait);
 
-            if let Ok(()) = block_on(buffer_future) {
+            if block_on(buffer_future) == Ok(()) {
                 rv.extend_from_slice(&buffer_slice.get_mapped_range());
             }
 
@@ -304,6 +312,7 @@ impl iced_graphics::window::Compositor for Compositor {
 }
 
 // TODO: This struct and Swapchain should be interchangeable, maybe an enum?
+/// Structure that the [`Compositor`] renders to.
 struct Framebuffer {
     target: wgpu::Texture,
     output: wgpu::Buffer,
@@ -319,7 +328,7 @@ struct BufferDimensions {
 }
 
 impl BufferDimensions {
-    fn new(width: usize, height: usize) -> Self {
+    const fn new(width: usize, height: usize) -> Self {
         let bytes_per_pixel = std::mem::size_of::<u32>();
         let unpadded_bytes_per_row = width * bytes_per_pixel;
         let align = wgpu::COPY_BYTES_PER_ROW_ALIGNMENT as usize;
