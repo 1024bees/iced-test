@@ -85,7 +85,7 @@ mod test {
             ))),
             TraceEvent::CheckScreenshot(Box::new(|ss: Screenshot| {
                 let golden_ss = Screenshot::from_png(PathBuf::from(format!(
-                    "{}/golden/increment_ss.png",
+                    "{}/golden/increment_ss_ref.png",
                     env!("CARGO_MANIFEST_DIR")
                 )))
                 .unwrap();

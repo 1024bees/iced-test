@@ -171,11 +171,7 @@ impl Compositor {
 
             frame.output.unmap();
 
-            Some(Screenshot::new(
-                rv,
-                self.size.width as u32,
-                self.size.height as u32,
-            ))
+            Some(Screenshot::new(rv, self.size.width, self.size.height).encode_png_frame())
         } else {
             None
         }
