@@ -78,7 +78,7 @@ impl Compositor {
 
         let frame_buffer = None;
 
-        Some(Compositor {
+        Some(Self {
             instance,
             settings,
             device,

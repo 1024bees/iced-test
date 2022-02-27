@@ -1,2 +1,2 @@
 //! Headless compositors
-pub(crate) mod wgpu;
+pub mod wgpu;

@@ -45,10 +45,10 @@ impl Into<png::ColorType> for ColorType {
 }
 
 impl From<png::ColorType> for ColorType {
-    fn from(color: png::ColorType) -> ColorType {
+    fn from(color: png::ColorType) -> Self {
         match color {
-            png::ColorType::Rgb => ColorType::Rgb,
-            png::ColorType::Rgba => ColorType::Rgba,
+            png::ColorType::Rgb => Self::Rgb,
+            png::ColorType::Rgba => Self::Rgba,
             _ => panic!("Unsupported color"),
         }
     }
@@ -56,7 +56,7 @@ impl From<png::ColorType> for ColorType {
 
 impl Screenshot {
     /// Create a new [`Screenshot`] object
-    pub fn new(payload: Vec<u8>, width: usize, height: usize) -> Self {
+    #[must_use] pub fn new(payload: Vec<u8>, width: usize, height: usize) -> Self {
         Self {
             payload: Arc::new(payload),
             width,
@@ -67,7 +67,7 @@ impl Screenshot {
     }
 
     /// Sets the encoding field for a [`Screenshot`] object
-    pub fn color_encoding(mut self, color_type: ColorType) -> Self {
+    #[must_use] pub fn color_encoding(mut self, color_type: ColorType) -> Self {
         self.color_encoding = color_type;
 
         self
@@ -135,7 +135,7 @@ impl Screenshot {
     /// This does a round-trip from raw data-> png data -> back to "raw frame data;
     /// The motivation for this is that the raw pixel data of a screenshot won't be equivalent to what the data in a png frame will be
     /// due to padding or other encoding limitations
-    pub fn encode_png_frame(self) -> Self {
+    #[must_use] pub fn encode_png_frame(self) -> Self {
         let mut out_vec = vec![];
         self.encode_png(&mut out_vec);
 

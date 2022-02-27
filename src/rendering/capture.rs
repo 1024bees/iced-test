@@ -20,8 +20,8 @@ where
     //let ss = render_glutin(application, window_size);
 
     //#[cfg(not(feature = "glow"))]
-    let ss = render_wgpu(application, window_size);
-    ss
+    
+    render_wgpu(application, window_size)
 }
 //
 

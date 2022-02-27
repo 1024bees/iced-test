@@ -54,7 +54,7 @@ pub fn execute_message_trace<A>(
 where
     A: iced::Application + 'static,
 {
-    let messages = messages.into_iter().map(|msg| TraceEvent::Message(msg));
+    let messages = messages.into_iter().map(TraceEvent::Message);
     execute_iced_trace(flags, messages)
 }
 
