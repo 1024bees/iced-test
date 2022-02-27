@@ -63,7 +63,7 @@ mod test {
     use super::*;
     use iced_test::{
         runners::{execute_iced_trace, execute_message_trace},
-        TraceEvent,
+        Screenshot, TraceEvent,
     };
 
     use std::path::PathBuf;
@@ -83,6 +83,17 @@ mod test {
                 "{}/golden/increment_ss.png",
                 env!("CARGO_MANIFEST_DIR")
             ))),
+            TraceEvent::CheckScreenshot(Box::new(|ss: Screenshot| {
+                let golden_ss = Screenshot::from_png(PathBuf::from(format!(
+                    "{}/golden/increment_ss.png",
+                    env!("CARGO_MANIFEST_DIR")
+                )))
+                .unwrap();
+                println!("Golden is {:#?}",golden_ss);
+                println!("taken is {:#?}",ss);
+
+                ss == golden_ss
+            })),
         ];
         let app_state: Counter = execute_iced_trace((), message_trace);
         assert_eq!(app_state.value, 2)

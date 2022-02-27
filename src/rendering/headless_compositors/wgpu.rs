@@ -122,6 +122,9 @@ impl Compositor {
         )
     }
     fn resize_framebuffer(&mut self, width: u32, height: u32) {
+        //FIXME: HACK! this is required because for some reason physical size -> 1.5x logical size
+        let width = width * 3 / 2;
+        let height = height * 3 / 2;
         let framebuffer = {
             let size = BufferDimensions::new(width as usize, height as usize);
             let output = self.device.create_buffer(&wgpu::BufferDescriptor {
@@ -153,8 +156,8 @@ impl Compositor {
     }
 }
 
-impl crate::rendering::headless::VirtualCompositor for Compositor {
-    fn read(&self) -> Option<Screenshot> {
+impl Compositor {
+    pub fn read(&self) -> Option<Screenshot> {
         let mut rv = Vec::new();
 
         if let Some(frame) = &self.frame_buffer {
@@ -203,7 +206,6 @@ impl iced_graphics::window::Compositor for Compositor {
     }
 
     fn configure_surface(&mut self, surface: &mut Self::Surface, width: u32, height: u32) {
-        self.size = BufferDimensions::new(width as usize, height as usize);
         surface.configure(
             &self.device,
             &wgpu::SurfaceConfiguration {
@@ -222,7 +224,7 @@ impl iced_graphics::window::Compositor for Compositor {
     fn present<T: AsRef<str>>(
         &mut self,
         renderer: &mut Self::Renderer,
-        surface: &mut Self::Surface,
+        _surface: &mut Self::Surface,
         viewport: &Viewport,
         background_color: Color,
         overlay: &[T],
@@ -265,6 +267,9 @@ impl iced_graphics::window::Compositor for Compositor {
         });
 
         renderer.with_primitives(|backend, primitives| {
+            for primitive in primitives {
+                println!("prim is {:#?}", primitive);
+            }
             backend.present(
                 &mut self.device,
                 &mut self.staging_belt,

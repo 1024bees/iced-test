@@ -1,14 +1,16 @@
 //! Data structure representing a screenshot
-
 use std::error::Error;
 use std::fs::File;
 use std::io::Write;
 use std::sync::Arc;
 #[derive(Debug, Clone, PartialEq)]
-/// A single screencap. The payload in this structure is always a raw RGB image
+/// A single screencap.
 pub struct Screenshot {
+    /// Raw bytes that represent the screenshot; encoded as png
     payload: Arc<Vec<u8>>,
+    /// Width of the image in pixels
     width: u32,
+    /// Height of the image in pixels
     height: u32,
     encoding: ColorType,
 }
@@ -35,7 +37,7 @@ impl From<png::ColorType> for ColorType {
         match color {
             png::ColorType::Rgb => ColorType::Rgb,
             png::ColorType::Rgba => ColorType::Rgba,
-            _ => panic!("Unsupported"),
+            _ => panic!("Unsupported color"),
         }
     }
 }
@@ -58,9 +60,7 @@ impl Screenshot {
     }
 
     /// Creates a [`Screenshot`] object from png
-    pub fn from_png<S: AsRef<std::path::Path>>(
-        path: S,
-    ) -> Result<Self, Box<dyn Error>> {
+    pub fn from_png<S: AsRef<std::path::Path>>(path: S) -> Result<Self, Box<dyn Error>> {
         let decoder = png::Decoder::new(File::open(path)?);
         let mut reader = decoder.read_info()?;
         let mut payload = vec![0; reader.output_buffer_size()];
@@ -76,11 +76,12 @@ impl Screenshot {
 
     /// Saves the [`Screenshot`] to the input path
     pub fn save_image_to_png<S: AsRef<std::path::Path>>(&self, path: S) {
-        let mut png_encoder = png::Encoder::new(
-            std::fs::File::create(path).unwrap(),
-            self.width as u32,
-            self.height as u32,
-        );
+        let file = std::fs::File::create(path).unwrap();
+        self.encode_png(file);
+    }
+
+    fn encode_png<W: Write + 'static>(&self, buffer: W) {
+        let mut png_encoder = png::Encoder::new(buffer, self.width as u32, self.height as u32);
         png_encoder.set_depth(png::BitDepth::Eight);
         png_encoder.set_color(self.encoding.into());
 
@@ -91,8 +92,8 @@ impl Screenshot {
 
         let align = 256;
         let unpadded_bytes_per_row = self.width * bytes_per_pixel as u32;
-        let padded_bytes_per_row = unpadded_bytes_per_row
-            + (align - unpadded_bytes_per_row % align) % align;
+        let padded_bytes_per_row =
+            unpadded_bytes_per_row + (align - unpadded_bytes_per_row % align) % align;
 
         let mut png_writer = png_encoder
             .write_header()
@@ -121,6 +122,16 @@ impl Screenshot {
 
         png_writer.finish().expect("Png writer finish failed");
     }
+
+    // This does a round-trip from raw data-> png data -> back to "raw frame data;
+    // The motivation for this is that the raw pixel data of a screenshot won't be equivalent to what the data in a png frame will be
+    // due to padding or other encoding limitations
+    fn encode_png_frame(mut self) -> Self {
+        let out_vec = vec![];
+        let png_encoder = png::Encoder::new(out_vec, self.width as u32, self.height as u32);
+
+        self
+    }
 }
 
 #[cfg(test)]
@@ -130,11 +141,9 @@ mod test {
     fn round_trip() {
         let payload = vec![0xfe; 4 * 512 * 512];
         let ss = Screenshot::new(payload, 512, 512);
-        let temp_png =
-            tempfile::NamedTempFile::new().expect("tempfile creation failed");
+        let temp_png = tempfile::NamedTempFile::new().expect("tempfile creation failed");
         ss.save_image_to_png(temp_png.path());
-        let ss_from_file =
-            Screenshot::from_png(temp_png.path()).expect("Decoder fail");
+        let ss_from_file = Screenshot::from_png(temp_png.path()).expect("Decoder fail");
         assert_eq!(ss, ss_from_file);
     }
 
@@ -142,11 +151,15 @@ mod test {
     fn round_trip_rgb() {
         let payload = vec![0xfe; 3 * 512 * 512];
         let ss = Screenshot::new(payload, 512, 512).encoding(ColorType::Rgb);
-        let temp_png =
-            tempfile::NamedTempFile::new().expect("tempfile creation failed");
+        let temp_png = tempfile::NamedTempFile::new().expect("tempfile creation failed");
         ss.save_image_to_png(temp_png.path());
-        let ss_from_file =
-            Screenshot::from_png(temp_png.path()).expect("Decoder fail");
+        let ss_from_file = Screenshot::from_png(temp_png.path()).expect("Decoder fail");
+        let temp_png2 = tempfile::NamedTempFile::new().expect("tempfile creation failed");
+
+        ss_from_file.save_image_to_png(temp_png2.path());
+        let ss_from_file2 = Screenshot::from_png(temp_png.path()).expect("Decoder fail");
+        assert_eq!(ss_from_file2, ss_from_file);
+
         assert_eq!(ss, ss_from_file);
     }
 }

@@ -1,6 +1,5 @@
 //! Utilities for rendering headless runners
 //
-use super::headless::VirtualCompositor;
 use super::screenshot::Screenshot;
 use crate::runtime::{application::Application, settings::Window, Size};
 use iced_graphics::window::Compositor;
@@ -84,86 +83,3 @@ where
     drop(ManuallyDrop::into_inner(user_interface));
     ss
 }
-
-//#[cfg(feature = "glow")]
-///// Glutin implementation for rendering a single frame to a [`Screenshot`]; this compiles fine but
-///// hasn't been tested yet
-//fn render_glutin<A>(application: &mut A, window_size: (u32, u32)) -> Screenshot
-//where
-//    A: Application<Renderer = iced_graphics::Renderer<crate::renderer::Backend>> + 'static,
-//{
-//    use glutin::event_loop::EventLoop;
-//
-//    use glutin::ContextBuilder;
-//    use iced_graphics::window::GLCompositor;
-//    use iced_winit::application;
-//
-//    let renderer_settings = crate::renderer::Settings {
-//        headless: true,
-//        ..crate::renderer::Settings::from_env()
-//    };
-//    let window = Window {
-//        size: window_size,
-//        ..Window::default()
-//    };
-//
-//    let mut debug = Debug::new();
-//    debug.startup_started();
-//
-//    let mut event_loop: EventLoop<A::Message> = EventLoop::with_user_event();
-//    let mut proxy = event_loop.create_proxy();
-//
-//    let subscription = application.subscription();
-//
-//    let context = {
-//        let builder = window.into_builder(
-//            &application.title(),
-//            Mode::Hidden,
-//            event_loop.primary_monitor(),
-//            None,
-//        );
-//
-//        let context = ContextBuilder::new()
-//            .with_vsync(true)
-//            .with_multisampling(crate::renderer::window::Compositor::sample_count(
-//                &renderer_settings,
-//            ) as u16)
-//            .build_windowed(builder, &event_loop)
-//            .unwrap();
-//
-//        #[allow(unsafe_code)]
-//        unsafe {
-//            context.make_current().expect("Make OpenGL context current")
-//        }
-//    };
-//
-//    #[allow(unsafe_code)]
-//    let (mut compositor, renderer) = unsafe {
-//        crate::renderer::window::Compositor::new(renderer_settings, |address| {
-//            context.get_proc_address(address)
-//        })
-//        .unwrap()
-//    };
-//
-//    let mut state = State::new(application, context.window());
-//    let mut user_interface = ManuallyDrop::new(application::build_user_interface(
-//        application,
-//        Cache::default(),
-//        &mut renderer,
-//        state.logical_size(),
-//        &mut debug,
-//    ));
-//    let _ = user_interface.draw(&mut renderer, iced::Point::default());
-//    context.window().request_redraw();
-//
-//    compositor.present(
-//        &mut renderer,
-//        state.viewport(),
-//        state.background_color(),
-//        &debug.overlay(),
-//    );
-//
-//    let ss = compositor.read().unwrap();
-//    drop(ManuallyDrop::into_inner(user_interface));
-//    ss
-//}

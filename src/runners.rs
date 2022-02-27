@@ -2,10 +2,7 @@
 
 use crate::rendering::capture::render_once;
 use crate::trace_events::TraceEvent;
-//use iced::{Application};
 use iced_native::Program;
-
-
 
 /// Run an [`Application`] headlessly, discarding all commands with a series of [`TraceEvents`]. Returns the [`Application`] after
 /// all messages have been exhausted
@@ -15,13 +12,12 @@ pub fn execute_iced_trace<A>(
 ) -> A
 where
     A: iced::Application + 'static,
-    //<A as Program>::Message: 'static,
 {
     let (raw_application, _) = A::new(flags);
     let mut application = AppHarness(raw_application);
 
     //TODO: find a better window_size; have a way to configure this via the trace
-    let window_size = (600, 600);
+    let window_size = (800, 800);
     for event in trace_events {
         match event {
             TraceEvent::Message(message) => {
@@ -46,7 +42,6 @@ where
             }
         }
     }
-
     application.0
 }
 
@@ -57,13 +52,11 @@ pub fn execute_message_trace<A>(
     messages: impl IntoIterator<Item = A::Message>,
 ) -> A
 where
-    //A: iced::Application + crate::runtime::Application + 'static,
     A: iced::Application + 'static,
 {
     let messages = messages.into_iter().map(|msg| TraceEvent::Message(msg));
     execute_iced_trace(flags, messages)
 }
-
 
 ///Functionally, this is identical to the Instance type that exists in [`iced::application`] but is
 ///not publically exposed. we use this as a "proxy" type to impl `crate::runtime::Application`.

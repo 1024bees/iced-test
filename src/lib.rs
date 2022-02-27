@@ -58,3 +58,4 @@ use iced_winit as runtime;
 use iced_glutin as runtime;
 
 pub use trace_events::TraceEvent;
+pub use rendering::screenshot::Screenshot;

@@ -18,7 +18,7 @@ iced_native = {git = "https://github.com/iced-rs/iced", branch="master" }
 iced_winit = {git = "https://github.com/iced-rs/iced", branch="master" }
 iced_wgpu = {git = "https://github.com/iced-rs/iced", branch="master" }
 iced_core = {git = "https://github.com/iced-rs/iced", branch="master" }
-iced_glutin = {git = "https://github.com/iced-rs/iced", branch="master", optional=true }
+#iced_glutin = {git = "https://github.com/iced-rs/iced", branch="master", optional=true }
 iced_glow = {git = "https://github.com/iced-rs/iced", branch="master", optional=true }
 
 raw-window-handle = "0.4"
@@ -37,11 +37,11 @@ git = "https://github.com/iced-rs/winit"
 rev = "02a12380960cec2f351c09a33d6a7cc2789d96a6"
 
 
-[dependencies.glutin]
-version = "0.27"
-git = "https://github.com/iced-rs/glutin"
-rev = "492c20605907accf2b5dc2da52284305fd128346"
-optional=true
+#[dependencies.glutin]
+#version = "0.27"
+#git = "https://github.com/iced-rs/glutin"
+#rev = "492c20605907accf2b5dc2da52284305fd128346"
+#optional=true
 
 [dev-dependencies]
 tempfile = "*"
@@ -53,7 +53,7 @@ tempfile = "*"
 #default uses wgpu for rendering
 default = []
 # uses iced_glow over iced_wgpu
-glow = ["iced_glutin", "iced_glow", "glutin"]
+#glow = ["iced_glutin", "iced_glow", "glutin"]
 
 
 [workspace]
