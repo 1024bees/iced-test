@@ -1,6 +1,6 @@
 # Iced - Testing utilities
 
-This crate contains testing utilities for the GUI library [Iced](https://github.com/hecrj/iced). This crate is a WIP and is looking for more direction from other Iced users and developers; constructive criticism is welcomed.
+This crate contains testing utilities for the [Iced](https://github.com/hecrj/iced) library . This crate is a WIP and is looking for more direction from other Iced users and developers; constructive criticism and discussion is welcomed.
 
 
 ## Overview:
@@ -31,7 +31,7 @@ pub enum TraceEvent<A: iced::Application> {
 ```
 
 
-A trace can also be a serialized view of solely Application messages
+A trace can also be a serialized view of only Application messages
 
 
 
@@ -42,7 +42,7 @@ A trace can also be a serialized view of solely Application messages
 Include `iced_test` as a dev-dependency in your `Cargo.toml`:
 ```toml
 [dependencies]
-iced = {git = "https://github.com/1024bees/iced", branch="headless" }
+iced = {git = "https://github.com/iced-rs/iced", branch="master" }
 
 
 [dev-dependencies]
