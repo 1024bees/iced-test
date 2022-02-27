@@ -89,8 +89,8 @@ mod test {
                     env!("CARGO_MANIFEST_DIR")
                 )))
                 .unwrap();
-                println!("Golden is {:#?}",golden_ss);
-                println!("taken is {:#?}",ss);
+                println!("Golden is {:#?}", golden_ss);
+                println!("taken is {:#?}", ss);
 
                 ss == golden_ss
             })),

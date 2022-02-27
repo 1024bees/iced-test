@@ -107,20 +107,15 @@ impl Screenshot {
 
         let unpadded_bytes_per_row = self.width * bytes_per_pixel;
         let align = match self.source_encoding {
-            ByteSource::WGPU => wgpu::COPY_BYTES_PER_ROW_ALIGNMENT as usize, 
+            ByteSource::WGPU => wgpu::COPY_BYTES_PER_ROW_ALIGNMENT as usize,
             ByteSource::Png => 0,
         };
-        let padded_bytes_per_row_padding  = if align != 0 {
-         (align - unpadded_bytes_per_row % align) % align
+        let padded_bytes_per_row_padding = if align != 0 {
+            (align - unpadded_bytes_per_row % align) % align
         } else {
             0
         };
         let padded_bytes_per_row = unpadded_bytes_per_row + padded_bytes_per_row_padding;
-
-        println!("encoding is {:#?}", self.color_encoding);
-        println!("unpadded per row: {}", unpadded_bytes_per_row);
-        println!("padded per row: {}", padded_bytes_per_row);
-        println!("vec length is {}", self.payload.len());
 
         let mut png_writer_z = png_encoder.write_header().unwrap();
         let mut png_writer = png_writer_z

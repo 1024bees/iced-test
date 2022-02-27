@@ -57,5 +57,5 @@ use iced_winit as runtime;
 #[cfg(all(not(target_arch = "wasm32"), feature = "glow"))]
 use iced_glutin as runtime;
 
-pub use trace_events::TraceEvent;
 pub use rendering::screenshot::Screenshot;
+pub use trace_events::TraceEvent;
